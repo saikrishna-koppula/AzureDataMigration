@@ -5,14 +5,14 @@
 3. Create a user in the database and grant required premissions so that it can be used to log into the database when being accessed from cloud. 
 4. Create the tables as per your data structure and load data into the tables.
 
-###Loading data into the on premises SQL Server
+### Loading data into the on premises SQL Server
 1. 
 
 
 
 Now that your on premise database is ready, let us start creating our cloud database which will be the source for OLAP.
 
-##Azure Cloud Setup
+## Azure Cloud Setup
 1. Create a resource group for the project: rg-db-migration-project
 2. Create the following services under the resource group: Azure Databricks Service, Data Factory (V2), Synapse Workspace, Key Vault, and a Data Lake storage account. <Image>
 3. Add the SQL Server database user credentials (created in the On-premises SQL Server Setup step) to Key Vault.
