@@ -1,7 +1,10 @@
 # Azure Data Migration Project
 This is an end-to-end data engineering project involving:
-- Development of a structure for a POS database on an On-Premises SQL Server for OLTP
-- Migration of the on-premises SQL Server database to Azure Cloud to enable OLAP
+- Creating your own POS database by hosting an On-Premises SQL Server for Transactional Processing.
+  - Structuring your database according to the needs of transational processing
+  - Normalizing your database
+  - Storing data efficiently
+- Migrating the on-premises SQL Server database to Azure Cloud to enable Analytical Processing.
   - Data Pipeline creation for moving historical data as a one time data migrations using Azure Data Factory
   - Data Pipeline creation to automate data transfer from SQL Server to Azure Data Lake using delta data load process
   - Usage of Azure Databricks to transform raw data into analytical dataset
