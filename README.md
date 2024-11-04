@@ -4,6 +4,9 @@ This is an end-to-end data engineering project involving:
   - Structuring your database according to the needs of transational processing
   - Normalizing your database
   - Storing data efficiently
+- Setting up your cloud stack for an analytical database
+  - Creating your resource group on Azure Cloud
+  - Provisioning Azure Data Lake Storage, Azure Data Bricks and other required tools
 - Migrating the on-premises SQL Server database to Azure Cloud to enable Analytical Processing.
   - Data Pipeline creation for moving historical data as a one time data migrations using Azure Data Factory
   - Data Pipeline creation to automate data transfer from SQL Server to Azure Data Lake using delta data load process
