@@ -1,4 +1,4 @@
-# Azure Data Migration Project
+# Azure Data Migration Project Overview
 This is an end-to-end data engineering project involving:
 - Creating your own POS database by hosting an On-Premises SQL Server for Transactional Processing.
   - Structuring your database according to the needs of transational processing
@@ -14,4 +14,4 @@ This is an end-to-end data engineering project involving:
   - Creation of Azure Synapse Analytics SQL Database to query data in data lake for reporting needs
   - Creation of Tableau dashboards to visualize key metrics and display insights
  
-    
+# Pipeline Architecture & Data Lineage Diagram
