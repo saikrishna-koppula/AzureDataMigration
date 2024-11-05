@@ -7,3 +7,12 @@
 
 ### Loading data into the on premises SQL Server
 1. 
+
+![ER Diagram](./img/ER%20Diagram.png)
+
+
+#### Features of my POS database include:
+    - Uses Triggers and Stored Procedures to support one click transaction processing
+    - Users are allowed to use views to look at the final data to ensure real time updates are provided to them
+    - Perfoms required transformations within the transaction with the help of Triggers
+    - Minimizes required human interaction with the data base for data entry
