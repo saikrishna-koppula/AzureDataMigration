@@ -18,4 +18,4 @@ This is an end-to-end data engineering project involving:
    - Creation of Tableau dashboards to visualize key metrics and display insights from the analytical database
 
 # Pipeline Architecture & Data Lineage Diagram
-![Data Lineage Architecture Image]
+![Data Lineage Architecture Image](./img/Azure%20data%20lineage.png)

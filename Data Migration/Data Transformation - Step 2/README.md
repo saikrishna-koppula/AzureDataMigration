@@ -25,3 +25,5 @@ The specific transformations performed for this project can be found in [Source 
 * Now we can add two activities to our previous **copy_all_tables** pipeline to transform data in sourcelayer container and move it into factlayer container. These activities were present in the pipline screenshot shown before. The same can be seen below as well.
 
   ![Pipeline](./img/Pipeline.png)
+
+The data is now cleaned and is present in the fact layer of the data lake. The next step involves loading this data into a database.
