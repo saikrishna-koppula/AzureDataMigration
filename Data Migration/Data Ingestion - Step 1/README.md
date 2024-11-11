@@ -1,79 +1,124 @@
-Now that we have our source and target databases setup, let us first see how to connect them.
+# Connecting On-Prem SQL Server to Azure Data Factory
 
-## Connecting On-Prem SQL Server to Azure Data Factory
+With both our source and target databases set up, I started connecting the on-premises SQL Server database to Azure Data Factory (ADF). Since ADF does not directly connect to on-premises databases, I used **Integration Runtime (IR)** for this. Specifically, **Self-Hosted Integration Runtime (SHIR)** was set up to securely transfer data between the on-premises source and the Azure cloud using ADF's Linked Service.
 
-Since ADF does not inherently connect to on-premises databases, we’ll use **Integration Runtime (IR)** to create this connection. **SHIR (Self Hosted INtegration Runtime)** is a software component that has to be installed on a machine within your on-premises network and enables secure data transfer between your on-premises data source. However, we have to configure it using our Azure cloud to ensure secure connection. To do this, we utilize a Linked Service in Azure Data Factory.
+## Steps to Connect On-Premises SQL Server to ADF
 
-We will follow the below steps to connect the on-premises database and ADF using Integration Runtime.
+1. **Access Integration Runtimes in ADF Studio:**
+   - Open the **Manage** tab in ADF Studio and select **Integration Runtimes**.
+   
+2. **Create a New Integration Runtime:**
+   - Click **New** and choose **Self-hosted Integration Runtime (SHIR)**, as our data source is on-premises.
+   - Name the integration runtime and click **Create**.
 
-- Go to the Manage tab in ADF Studio and select Integration Runtimes.
-- Choose New to add a new integration runtime. Select Self-hosted Integration Runtime (SHIR) since our data source is on-premises.
-- Name your IR and choose Create.
-- For this project, we are using the Express setup to install SHIR directly on machine.
-- Once downloaded, we run the setup to install and register SHIR on the hosting system, enabling communication between ADF and our local database.
-- To confirm the setup, open Microsoft Integration Runtime on your system. It should show as Connected to the ADF environment.
+3. **Install SHIR:**
+   - For this project, I used the Express setup to install SHIR directly on my machine.
+   - After downloading the SHIR setup, I installed and registered it on the local system, enabling ADF to securely communicate with the on-premises SQL Server.
 
-Now that our databases are connected, Our next step is to configure a data pipeline that will move data from source to target.
+4. **Verify Connection:**
+   - Open Microsoft Integration Runtime on the local system to confirm that it shows as connected to the ADF environment.
 
-## Configuring the Data Ingestion Pipeline
+With the databases now connected, the next step was configuring a data pipeline to transfer data from the source to the target.
 
-1. In the ADF **Author** tab, select **Pipelines** and create a new pipeline. Name it "CopyPipeline" to represent the copy operation.
-2. Add a **Copy Data** activity to the pipeline. This activity will pull data from the on-premises SQL Server.
-3. We need to specify the source and target/destination for the pipeline.
+---
 
-### Specifying Source and Sink:
+# Configuring the Data Ingestion Pipeline
 
-#### Source:
+### Step 1: Create a New Pipeline
 
-* In the Copy Data activity, navigate to **Source** and select **New Dataset** .
+1. In the **Author** tab of ADF, select **Pipelines** and create a new pipeline named "CopyPipeline" to represent the data copy operation.
+2. Add a **Copy Data** activity to the pipeline to pull data from the on-premises SQL Server.
+3. Define the source and target (sink) for the pipeline.
+
+---
+
+## Specifying Source and Sink
+
+### Source Configuration
+
+- In the **Copy Data** activity, navigate to **Source** and select **New Dataset**.
+  
   ![Source for Ingestion](./img/Source%20for%20Data%20Ingestion.png)
-* Choose **SQL Server** as the dataset type, and connect it to your on-premises SQL Server using **Linked Services** .
-* Create a **New Linked Service** to define the connection properties:
-  * Select **SHIR** as the Integration Runtime.
-  ![SQL Server Linked Service Screenshot](./img/SQL%20Linked%20Service.png)
-  * Enter the server name and the database name from SQL Server Management Studio.
-  * For authentication, we have stored the credentilas in our Azure Key Vault resource and we will use it here. For accessing those credentials, create a new linked service for the key voault that allows communication between ADF and Azure Key Vault.
-  ![Azure Key Vault Linked Service Image](./img/Key%20Vault%20Linked%20Service.png)
-* Now, ADF will be able to connect to on-prem SQL Server database with the help of these 2 linked services.
+  
+- Choose **SQL Server** as the dataset type and connect it to the on-premises SQL Server using **Linked Services**.
+- Create a **New Linked Service** to configure the connection properties:
+  - Select **SHIR** as the Integration Runtime.
+  
+    ![SQL Server Linked Service Screenshot](./img/SQL%20Linked%20Service.png)
+    
+  - Enter the server and database names from SQL Server Management Studio.
+  - For authentication, I utilized the credentials stored in our **Azure Key Vault**. This required creating a new linked service for the Key Vault, allowing secure communication between ADF and the Key Vault.
+  
+    ![Azure Key Vault Linked Service Image](./img/Key%20Vault%20Linked%20Service.png)
 
-#### Sink:
+- These linked services enable ADF to securely connect to the on-premises SQL Server.
 
-* In the Copy Data activity, navigate to **Sink**.
+### Sink Configuration
+
+- In the **Copy Data** activity, navigate to **Sink**.
+  
   ![Sink for Ingestion](./img/Sink%20for%20Ingestion.png)
-* **Sink** is sourcelayer container in our **sddatalakegen2** resource.
-* Create Azure Data Lake Storage Linked Service (**AzureDataLakeStorage1**). Use AutoResolveIntegrationRuntime as the resource is cloud based. Specify file path, source container as shown in the below figure.
+  
+- **Sink** is set to the `sourcelayer` container within the **sddatalakegen2** resource.
+- Created an **Azure Data Lake Storage Linked Service** named **AzureDataLakeStorage1**. Here, **AutoResolveIntegrationRuntime** was used since the resource is cloud-based. I specified the file path and source container as shown below:
+  
   ![Datalake Linked Service Screenshot](./img/DataLake%20Linked%20Service.png)
-* Publish all these changes to ADF, and now, we have all services needed for data ingestion.
+  
+- After completing these configurations, I published all changes to ADF, establishing a fully connected setup for data ingestion.
 
-### Defining the Data Pipeline
-We have setup the source and sink for our pipeline. Now let us define the actions of the pipeline. Below is a screenshot for how our pipeline will look like.
+---
+
+# Defining the Data Pipeline
+
+With the source and sink configured, I proceeded to define the pipeline's actions. Below is a screenshot of the overall pipeline layout.
 
 ![Pipeline Image](./img/Pipeline.png)
 
-Our pipeline will have a look up activity that will intially read the names of all the tables in a given database. Once the list of tables is available, this list will be passed to the next activity in the pipline i.e for each activity. This activity will perform a series of steps for each table in the list passed by the previous activity.
+1. **Look Up Activity**: This initial activity retrieves a list of all table names in the on-premises database.
+2. **For Each Activity**: The list of tables generated by the Look Up activity is passed to this activity, which processes each table in sequence. The activities inside the **For Each** task are shown below.
 
-The activities inside for each task can be seen below.
+   ![Inside For Each Table](./img/Inside%20For%20Each%20Table.png)
+   
+   ![Inside For Each Table](./img/Inside%20For%20Each%20Table%202.png)
 
-![Inside For Each Table](./img/Inside%20For%20Each%20Table.png)
+3. The **For Each** activity is configured to copy each table from the source to the target database.
 
-![Inside For Each Table](./img/Inside%20For%20Each%20Table%202.png)
+---
 
-This for each activity is used to copy all tables from the source to the target database.
+## Source and Sink for 'For Each Task'
 
-The source and the sink for this task can be found in the below screenshots.
+The **source** and **sink** for the **For Each** activity are shown in the screenshots below.
 
-![Source Inside For Each Task](./img/Source%20Inside%20For%20Each%20Task.png)
+- **Source Configuration in For Each Task**:
 
-![Sink Inside For Each Task](./img/Sink%20Inside%20For%20Each%20Task.png)
+  ![Source Inside For Each Task](./img/Source%20Inside%20For%20Each%20Task.png)
 
-The data ingestion part of the pipeline is complete with these 2 activities.
+- **Sink Configuration in For Each Task**:
 
-By running the pipline that we built till now, we should be able to replicate an exact copy of all the tables present in the POS Schema on the On-Prem SQL Server. These tables are stored on the target database in the form of parquet files in the **sourcelayer** container as shown below.
+  ![Sink Inside For Each Task](./img/Sink%20Inside%20For%20Each%20Task.png)
 
-![Source Layer Folder Screenshot](./img/Source%20Layer%20Folders%20Screenshot.png)
+The data ingestion portion of the pipeline is now complete with these two activities.
 
-![POS Database Inside Source Layer](./img/Source%20Layer%20Parquet%20Files%20Screenshot.png)
+---
 
-![City Parquet File Screenshot](./img/City%20Parquet%20File%20Screenshot.png)
+# Running the Pipeline
 
-As per our project structure, we have 3 main layers. Source Layer, Stage Layer and Fact Layer. Companies typically try to maintain the same project structure for all ETL projects. To ensure we do the same thing, we have created a separate folder for our database inside source layer. Similarly, if we had more databases, they can have a separate folder too, categorizing them into different folders while maitaining consistency in the structure.
+By running the pipeline, we now have an exact copy of all tables from the **POS Schema** on the on-premises SQL Server. These tables are stored in the **sourcelayer** container in **parquet** file format, as shown below.
+
+- **Source Layer Folder Screenshot**:
+
+  ![Source Layer Folder Screenshot](./img/Source%20Layer%20Folders%20Screenshot.png)
+
+- **POS Database in Source Layer**:
+
+  ![POS Database Inside Source Layer](./img/Source%20Layer%20Parquet%20Files%20Screenshot.png)
+
+- **City Table in Parquet Format**:
+
+  ![City Parquet File Screenshot](./img/City%20Parquet%20File%20Screenshot.png)
+
+---
+
+### ETL Project Structure
+
+To maintain a consistent project structure across ETL projects, we created separate folders for our database inside the **source layer**. This structure is typically used by companies for all ETL projects. If additional databases were included, they could be organized similarly, ensuring that each layer (Source, Stage, and Fact) remains consistent and organized.

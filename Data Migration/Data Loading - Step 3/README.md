@@ -1,11 +1,30 @@
-### Data Loading
+# Data Loading with Azure Synapse Analytics
 
-I will use Azure Synapse Analytics for loading the data from data lake to a Synapse SQL database. Synapse Analytics has a built-in connection to the Azure Data Lake, allowing direct querying of data. There are 2 types of SQL databases in Synapse: Serverless SQL Database and Dedicated SQL Database. We are going to use Serverless SQL Database.
+In this stage, I used **Azure Synapse Analytics** to load the data from **Azure Data Lake** into a **Synapse SQL database**. Synapse Analytics provides a built-in connection to Azure Data Lake, enabling direct querying of data. There are two types of SQL databases available in Synapse: **Serverless SQL Database** and **Dedicated SQL Database**. For this project, I used the **Serverless SQL Database**.
 
-I created a Synapse Analytics workspace. Once the workspace is created, I can then write a statement in SQL to use the file from the container in ADF and load data into a Table/View. Before writing the SQL statement, I cerated a serverless DB **Fact_POS**. Then I have written a SQL statemetn that creates a view for one table. NOw I have to do the same for all tables. I automated this process by creating a stored procedure that takes a parameter (View Name) and creates a base view for all the tables. Below are some screenshots.
+---
+
+## Creating the Synapse Analytics Workspace
+
+1. I created a Synapse Analytics workspace.
+   
+2. After creating the workspace, I wrote a SQL statement to load data directly from the data lake container into a **Table/View** within the Synapse workspace.
+   
+3. To organize the data, I created a **serverless database** named **Fact_POS**.
+
+---
+
+## Automating View Creation with a Stored Procedure
+
+Initially, I wrote a SQL statement to create a view for a single table. To automate the process for all tables, I created a **stored procedure** that takes a parameter (the **View Name**) and generates a base view for each table in the **factlayer** container.
+
+Below is a screenshot of the stored procedure:
 
 ![Views Stored Procedure Screenshot](./img/Views%20Stored%20Procedure.png)
 
-This stored procedure creates a view for each table present inside the factlayer. It is important to note that we don't need this step in our pipeline rather we need to run this procedure onky once as we need to create the views only once. However, if any changes are made tables structures on any tables, then we need to manually run this procedure once again. Below is a screenshot of views created after the procedure is run.
+- This stored procedure generates a view for every table present in the `factlayer`.
+- Importantly, this procedure only needs to be executed **once** to create the views. However, if there are any structural changes to the tables, this procedure will need to be manually re-run to update the views accordingly.
+
+After running the procedure, the views were created successfully. Below is a screenshot showing the views created:
 
 ![Views Created Screenshot](./img/Views%20Created%20Screenshot.png)

@@ -1,29 +1,51 @@
-In this part of the project, we will use Azure Databricks to make transformations to our data while moving it from source layer to stage layer and stage layer to fact layer containers in Azure Data Lake.
+# Transforming Data with Azure Databricks
 
-By the end of Data Ingestion, I was able to have a set of parquet files in the source layer that were the exact copy of tables in the On-Prem database. Now, I will load this files into databricks and perform required transformation on data and then store it back in a different layer. To make the required transformations, I need to follow the below steps.
+In this part of the project, I used **Azure Databricks** to perform transformations on the data while moving it from the **source layer** to the **stage layer** and then from the **stage layer** to the **fact layer** in **Azure Data Lake**.
+
+By the end of the Data Ingestion phase, I had a set of **parquet files** in the source layer, which were an exact copy of the tables in the on-premises database. Now, I loaded these files into Databricks to perform the required transformations and stored the transformed data in a different layer. The transformation process involved several key steps outlined below.
+
+---
 
 ## Creating the Azure Databricks Compute Workspace
 
-Go to **Databricks reource > Create Compute** .
+1. Navigate to **Databricks resource > Create Compute**.
+   
+2. **Create a Single Node Cluster**:
+   - Enable **credential passthrough for user-level data access** under **Advanced options** for Key Vault access.
+   - Since managed identity access cannot be granted directly to the Databricks resource, enabling this option allows Databricks to leverage user-level data access permissions to read from the data lake.
 
-* Create a Single node cluster
-* **Enable credential passthrough for user-level data access** under Advanced options for Key Vault access. This is needed because we cannot give managed identity level access to databricks resource for accessing data in data lake. By enabling this option, databricks will leverage the user-level data access permission to read data from data lake.
-* To read data from data lake, we first need to create mount points in Databricks File System. We can do so by following the instructions given in this link: [Access Azure Data Lake Storage using Microsoft Entra ID (formerly Azure Active Directory) credential passthrough (legacy) - Azure Databricks](https://learn.microsoft.com/en-us/azure/databricks/data-governance/credential-passthrough/adls-passthrough#--azure-data-lake-storage-gen2-1)
-* The same is accomplished in [Storage Mount Notebook](./Storage%20Mount%20Notebook.ipynb)
+3. **Set Up Mount Points**:
+   - To read data from Azure Data Lake, I created mount points in the **Databricks File System (DBFS)**.
+   - Followed instructions in this link to enable credential passthrough and set up the mount points: [Access Azure Data Lake Storage using Microsoft Entra ID (formerly Azure Active Directory) credential passthrough (legacy) - Azure Databricks](https://learn.microsoft.com/en-us/azure/databricks/data-governance/credential-passthrough/adls-passthrough#--azure-data-lake-storage-gen2-1)
+   - The mount setup process is documented in the [Storage Mount Notebook](./Storage%20Mount%20Notebook.ipynb).
 
-## Perform data transformation
+---
 
-Some specific data transformations are perfomed in each layer of movement. These ytransformation can be anything with respect to requirements like, Type Conversion, Caluclations, Table Joins, Business Logic Improvements, etc,.
+## Performing Data Transformations
 
-The specific transformations performed for this project can be found in [Source to Stage Notebook](./Source_to_Satge.ipynb) & [Stage to Fact Notebook](./Stage_to_Fact.ipynb) respectively.
+I performed specific data transformations as the data moved between layers. These transformations included various operations, such as type conversions, calculations, table joins, and business logic improvements based on project requirements.
 
-## Adding data transformation notebooks to Azure Data Factory pipeline
+- The specific transformations performed for this project are documented in two notebooks:
+  - [Source to Stage Notebook](./Source_to_Stage.ipynb)
+  - [Stage to Fact Notebook](./Stage_to_Fact.ipynb)
 
-* Create an access token in Azure Databricks by going to **User Settings > Developer** .
-* Add the generated access token to Key Vault
-* Create a linked service in Azure Data Factory to connect to Azure Databricks workspace using the created access token
-* Now we can add two activities to our previous **copy_all_tables** pipeline to transform data in sourcelayer container and move it into factlayer container. These activities were present in the pipline screenshot shown before. The same can be seen below as well.
+---
 
-  ![Pipeline](./img/Pipeline.png)
+## Adding Data Transformation Notebooks to Azure Data Factory Pipeline
 
-The data is now cleaned and is present in the fact layer of the data lake. The next step involves loading this data into a database.
+1. **Generate an Access Token** in Azure Databricks:
+   - Go to **User Settings > Developer** and create an access token.
+   
+2. **Store Access Token in Key Vault**:
+   - Add the generated access token to **Azure Key Vault**.
+
+3. **Create a Linked Service in Azure Data Factory**:
+   - Set up a linked service to connect Azure Data Factory to the Azure Databricks workspace using the access token stored in the Key Vault.
+
+4. **Add Transformation Activities to the Pipeline**:
+   - I added two activities to the previously created **copy_all_tables** pipeline to transform data in the `sourcelayer` container and move it into the `factlayer` container.
+   - These activities can be seen in the pipeline screenshot below:
+
+     ![Pipeline](./img/Pipeline.png)
+
+The data is now cleaned and stored in the **fact layer** of the data lake. The next step involves loading this data into a database.
