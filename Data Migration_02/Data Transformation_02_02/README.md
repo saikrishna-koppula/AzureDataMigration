@@ -29,6 +29,8 @@ I performed specific data transformations as the data moved between layers. Thes
   - [Source to Stage Notebook](./Source_to_Stage.ipynb)
   - [Stage to Fact Notebook](./Stage_to_Fact.ipynb)
 
+P.S: You will abe able to see only partial transformatinos and all the transformations could not be made public.
+
 ---
 
 ## Adding Data Transformation Notebooks to Azure Data Factory Pipeline
