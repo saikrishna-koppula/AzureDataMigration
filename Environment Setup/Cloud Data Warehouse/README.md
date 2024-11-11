@@ -1,28 +1,49 @@
-Now that your on premise database is ready, let us start creating our cloud database which will be the source for OLAP.
+# Setting Up the Azure Cloud Database for OLAP
 
-We are going to use the following Azure tools in building our project.
+With our on-premise database ready, I began setting up the cloud database that will act as our OLAP source. Here’s a breakdown of each step using various Azure tools:
 
-- **Azure Data Factory** - An ETL tool for data ingestion.
-- **Azure Synapse Analytics** - For creating a SQL-like environment in the cloud.
-- **Azure Databricks** - For data transformation and handling large datasets with tools like PySpark.
+### Tools Used in the Project
+- **Azure Data Factory** - For ETL and data ingestion.
+- **Azure Synapse Analytics** - To create a SQL-like cloud environment.
+- **Azure Databricks** - For data transformations and handling large datasets, using tools like PySpark.
 - **Azure Data Lake Storage Gen 2** - A cost-effective cloud storage solution.
-- **Azure Active Directory and Azure Key Vault** - For security, identity management, and storing sensitive information.
+- **Azure Active Directory and Azure Key Vault** - For security, identity management, and storing sensitive credentials.
 
+> **Note:** We’ll also use Tableau to connect to our cloud database for data visualization and analysis.
 
-**P.S:** We will connect Tableau (an external resource) that will connect to our database for data visualisation and analysis.
+Once the pipeline is fully set up, it will allow for real-time updates—any new data in the on-premise SQL database will flow seamlessly through Azure, appearing in the Tableau dashboards.
 
-Once our pipeline is set up, it will allow for real-time updates, where new data in the on-premise SQL database will flow through the Azure system and reflect in Tableau dashboards.
+---
 
 ## Azure Cloud Setup
-1. Create a resource group for the project: **POS_Data_ETL_Project**
-2. Create the following services under the resource group: Azure Databricks Service, Data Factory (V2), Synapse Workspace, Key Vault, and a Data Lake storage account. 
-![Resource Group Image](./img/Resource%20Group%20&%20Resources.png)
-3. Add the SQL Server database user credentials (created in the On-premises SQL Server Setup step) to Key Vault Resource. These will be used when the cloud will try to access the database for moving data.
-![Azure Key Vault Secrets Screenshot](./img/Key%20Vault%20Secrets%20SS.png)
-4. Navigate to data lake resource and create the following containers under Data Storage:
-   - **Source :** This layer is used to store data as it is received from the source of our pipeline
-   - **Stage :** This layer is used as intermediate layer. Some of the major transmations are done to the data when it is being moved from source layer to stage layer. This layer is also useful to store data in partially denormalised form.
-   - **Fact :** This layer will be the final layer of the data pipeline and will be used for data analysis and making business critical decisions. The data stored here is completely denormalised to the required extent of the analysis. Only minor transformations are applied on the data when it is being moved from stage layer to fact layer. But, it is important to note that, multiple tables are joined together to get this fact layer data.
-  ![Azure Data Containers](./img/Azure%20Data%20Containers.png)
- 
-By performing the above steps, we have set up a basic version of our target database in Azure Cloud.
+
+### Step 1: Create the Resource Group
+I started by creating a resource group named **POS_Data_ETL_Project** to organize all project resources.
+
+### Step 2: Create Required Azure Services
+Under the **POS_Data_ETL_Project** resource group, I set up the following services:
+   - **Azure Databricks Service**
+   - **Data Factory (V2)**
+   - **Synapse Workspace**
+   - **Key Vault**
+   - **Data Lake Storage Account**
+
+   ![Resource Group Image](./img/Resource%20Group%20&%20Resources.png)
+
+### Step 3: Secure Access with Azure Key Vault
+I added the SQL Server database user credentials (from our On-premises SQL Server Setup) to the **Key Vault Resource**. This setup allows our Azure services to securely access the on-premise database for data migration.
+
+   ![Azure Key Vault Secrets Screenshot](./img/Key%20Vault%20Secrets%20SS.png)
+
+### Step 4: Set Up Data Lake Containers
+In the Data Lake storage account, I created the following containers to organize data at various stages of processing:
+
+   - **Source:** Stores raw data as received from the pipeline’s source.
+   - **Stage:** Acts as an intermediate layer. Here, significant transformations are applied, and data may be partially denormalized.
+   - **Fact:** The final layer of our data pipeline, used for analysis and decision-making. Data here is fully denormalized, with only minor transformations applied as it moves from the stage layer. Multiple tables are joined to prepare this final layer.
+
+   ![Azure Data Containers](./img/Azure%20Data%20Containers.png)
+
+---
+
+With these steps completed, we now have a basic version of our target database set up in Azure Cloud, ready to handle data for OLAP and integration with Tableau.
