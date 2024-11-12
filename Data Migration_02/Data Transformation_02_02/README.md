@@ -29,7 +29,7 @@ I performed specific data transformations as the data moved between layers. Thes
   - [Source to Stage Notebook](./Source_to_Satge.ipynb)
   - [Stage to Fact Notebook](./Stage_to_Fact.ipynb)
 
-P.S: You will be able to see only partial part of the code aa all the transformations could not be made public.
+P.S: You will be able to see only partial part of the code as all the transformations could not be made public.
 
 ---
 
