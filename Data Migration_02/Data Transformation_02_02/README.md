@@ -26,10 +26,10 @@ By the end of the Data Ingestion phase, I had a set of **parquet files** in the 
 I performed specific data transformations as the data moved between layers. These transformations included various operations, such as type conversions, calculations, table joins, and business logic improvements based on project requirements.
 
 - The specific transformations performed for this project are documented in two notebooks:
-  - [Source to Stage Notebook](./Source_to_Stage.ipynb)
+  - [Source to Stage Notebook](./Source_to_Satge.ipynb)
   - [Stage to Fact Notebook](./Stage_to_Fact.ipynb)
 
-P.S: You will abe able to see only partial transformatinos and all the transformations could not be made public.
+P.S: You will be able to see only partial part of the code aa all the transformations could not be made public.
 
 ---
 

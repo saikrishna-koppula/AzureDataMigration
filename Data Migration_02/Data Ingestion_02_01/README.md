@@ -8,7 +8,7 @@ With both our source and target databases set up, I started connecting the on-pr
    - Open the **Manage** tab in ADF Studio and select **Integration Runtimes**.
    
 2. **Create a New Integration Runtime:**
-   - Click **New** and choose **Self-hosted Integration Runtime (SHIR)**, as our data source is on-premises.
+   - Click **New** and choose **Self-hosted Integration Runtime (SHIR)**, as our data source is an on-premise SQL Server.
    - Name the integration runtime and click **Create**.
 
 3. **Install SHIR:**
@@ -121,4 +121,4 @@ By running the pipeline, we now have an exact copy of all tables from the **POS 
 
 ### ETL Project Structure
 
-To maintain a consistent project structure across ETL projects, we created separate folders for our database inside the **source layer**. This structure is typically used by companies for all ETL projects. If additional databases were included, they could be organized similarly, ensuring that each layer (Source, Stage, and Fact) remains consistent and organized.
+To maintain a consistent project structure across ETL projects, I created separate folders for the database inside the **source layer**. This structure is typically used by companies for all ETL projects. If additional databases were included, they could be organized similarly, ensuring that each layer (Source, Stage, and Fact) remains consistent and organized.

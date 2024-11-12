@@ -13,7 +13,7 @@ From the list, I selected **Azure Synapse Analytics**. Tableau informed me of th
 ![Tableau Driver Requirement](./img/Tableau%20Driver%20Requirement.png)
 
 ### Step 3: Check Driver Installation
-After I already installed the required drivers, I was able to proceed directly to the connection setup screen without any additional installation steps. The screen looked like this:
+After I installed the required drivers, I was able to proceed to the connection setup screen without any additional installation steps. The screen looked like this:
 
 ![Tableau Source Connection](./img/Tableau%20Source%20Connection.png)
 
