@@ -29,7 +29,7 @@ I performed specific data transformations as the data moved between layers. Thes
   - [Source to Stage Notebook](./Source_to_Satge.ipynb)
   - [Stage to Fact Notebook](./Stage_to_Fact.ipynb)
 
-P.S: You will be able to see only partial part of the code as all the transformations could not be made public.
+P.S: You will be able to see only partial part of the code as all the transformations could not be made public. Please reach out to me if you would like to understand what kind of transformations I made for this project.
 
 ---
 
@@ -50,4 +50,10 @@ P.S: You will be able to see only partial part of the code as all the transforma
 
      ![Pipeline](./img/Pipeline.png)
 
-The data is now cleaned and stored in the **fact layer** of the data lake. The next step involves loading this data into a database.
+   - The entire pipeline in now read and I will show you a pictiure of it running successfully.
+
+      ![Pipeline ran successfully](./img/Pipeline%20ran%20Successfully.png)
+
+      ![Pipeline ran successfully](./img/Pipline%20ran%20Successfully%202.png)
+
+After running the pipeline successfully, the data is now cleaned and stored in the **fact layer** of the data lake. The next step involves loading this data into a database.
