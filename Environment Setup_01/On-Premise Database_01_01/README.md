@@ -9,7 +9,7 @@
 
 
 ### Loading data into the on premises SQL Server
-Typically, in a real-world scenario, we would have our transactional/source database ready with data. However, for the purpose of this project we are building our own database. In a scneario where the database is already existing, you would have to understand teh structre of the database and it's functionlaity to replicate the same or add new functionality without changing the business process in the analytical database.
+Typically, in a real-world scenario, we would have our transactional/source database ready with data. However, for the purpose of this project we are building our own database. In a scenario where the database is already existing, you would have to understand the structure of the database and it's functionality to replicate the same or add new functionality without changing the business process in the analytical database.
 
 For this project, I used the table structure shown below to load the data. The following ER diagram illustrates the relationships between the tables clearly.
 
